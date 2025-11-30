@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import { ArrowRight, Calendar } from 'lucide-react';
 import { SITE } from '../config';
 
@@ -20,13 +21,17 @@ const activities = (await getCollection('activities'))
     <!-- Background Image -->
     <div class="absolute inset-0 z-0">
       {SITE.hero.image ? (
-        <img 
+        <Image 
           class="w-full h-full object-cover" 
           src={SITE.hero.image} 
           alt={SITE.hero.title}
           loading="eager"
           fetchpriority="high"
           decoding="sync"
+          quality={60}
+          format="webp"
+          widths={[640, 1024, 1920]}
+          sizes="100vw"
         />
       ) : (
         <div class="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800"></div>
@@ -80,11 +85,14 @@ const activities = (await getCollection('activities'))
           <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 overflow-hidden flex flex-col h-full">
              {paper.data.cover && (
                <div class="h-48 overflow-hidden border-b border-gray-100 bg-gray-50">
-                 <img 
-                   src={paper.data.cover.src} 
+                 <Image 
+                   src={paper.data.cover} 
                    alt={paper.data.title}
                    class="w-full h-full object-cover"
-                   loading="lazy"
+                   quality={80}
+                  format="webp"
+                  widths={[320, 480]}
+                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                  />
                </div>
              )}
@@ -119,11 +127,14 @@ const activities = (await getCollection('activities'))
           <div class="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
             {item.data.cover && (
               <div class="h-48 overflow-hidden">
-                <img 
-                  src={item.data.cover.src} 
+                <Image 
+                  src={item.data.cover} 
                   alt={item.data.title}
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
+                  quality={80}
+                  format="webp"
+                  widths={[320, 480, 600]}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>
             )}

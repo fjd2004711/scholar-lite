@@ -6,8 +6,16 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
+  compressHTML: true,
+  build: {
+    inlineStylesheets: 'always',
+    assetsInlineLimit: 10240, // 10KB to inline achievements.css (7.5KB)
+  },
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      assetsInlineLimit: 10240,
+    }
   },
 
   integrations: [react()]

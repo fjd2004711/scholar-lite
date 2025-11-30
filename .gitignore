@@ -16,9 +16,24 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env.local
 
 # macOS-specific files
 .DS_Store
 
-# jetbrains setting folder
+# Windows-specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor directories and files
 .idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+coverage/
+
+# Vercel
+.vercel/

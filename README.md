@@ -52,6 +52,7 @@ We take performance seriously. Scholar-Lite is built on Astro to deliver **0kb J
 *   🖼️ **Real Image Support**: Easily configure your Lab Logo, Hero Image, and Team Avatars via config files.
 *   🧩 **Modular Components**: Ready-to-use academic components like Publication Lists, Team Cards, and Honor Badges.
 *   🔍 **SEO Optimized**: Automatic sitemap generation and meta tags to help your research get found.
+*   📱 **Mobile Optimized**: Fully responsive design with a modern, app-like mobile menu experience.
 
 ---
 

@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import { SITE } from '../config';
+import { ui, defaultLang } from '../i18n/ui';
 
 interface Props {
   title?: string;
@@ -42,9 +43,7 @@ const pageTitle = title ? `${title} | ${SITE.labName}` : `${SITE.labName} - ${SI
       </div>
     </footer>
 
-    <script>
-      import { ui, defaultLang } from '../i18n/ui';
-
+    <script is:inline define:vars={{ ui, defaultLang }}>
       // Make ui available globally for debugging if needed, but main logic is here
       const translations = ui;
       const fallbackLang = defaultLang;
@@ -81,6 +80,7 @@ const pageTitle = title ? `${title} | ${SITE.labName}` : `${SITE.labName} - ${SI
 
       // Initialize
       const currentLang = getStoredLang();
+      // Run immediately to avoid flash
       window.setLanguage(currentLang);
     </script>
   </body>

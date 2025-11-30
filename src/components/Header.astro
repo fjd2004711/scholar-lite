@@ -1,9 +1,24 @@
 ---
 import { SITE, LOGO_IMAGE } from '../config';
-import { Menu, X, Globe, ChevronDown, Check, Moon, Sun } from 'lucide-react';
+import { 
+  Menu, X, Globe, ChevronDown, Check, Moon, Sun,
+  Home, BookOpen, Trophy, Users, Calendar, UserPlus, Sparkles
+} from 'lucide-react';
 import { ui, defaultLang, languages } from '../i18n/ui';
 
 const { nav, i18n, customPages } = SITE;
+
+const iconMap: Record<string, any> = {
+  home: Home,
+  research: BookOpen,
+  achievements: Trophy,
+  team: Users,
+  activities: Calendar,
+  join: UserPlus,
+};
+
+// Helper to get icon
+const getIcon = (key: string) => iconMap[key] || Sparkles;
 ---
 
 <header class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 transition-colors duration-300">
@@ -81,80 +96,78 @@ const { nav, i18n, customPages } = SITE;
       <!-- Mobile Menu Button -->
       <button 
         id="mobile-menu-btn" 
-        class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-md touch-manipulation" 
+        class="md:hidden p-2 -mr-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors z-[80] relative" 
         aria-label="Toggle menu"
         aria-controls="mobile-menu"
         aria-expanded="false"
         onclick="window.toggleMobileMenu(event)"
       >
-        <span class="icon-menu block">
+        <span class="icon-menu block transition-transform duration-300">
           <Menu className="w-6 h-6" />
         </span>
-        <span class="icon-close hidden">
+        <span class="icon-close hidden absolute inset-0 flex items-center justify-center transition-transform duration-300 rotate-90">
           <X className="w-6 h-6" />
         </span>
       </button>
     </div>
   </div>
 
-  <!-- Mobile Nav Backdrop -->
-  <div 
-    id="mobile-menu-backdrop" 
-    class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[60] hidden transition-opacity duration-300 md:hidden"
-    onclick="window.closeMobileMenu()"
-  ></div>
-
-  <!-- Mobile Nav Panel -->
+  <!-- Mobile Nav Overlay (Solid White) -->
   <div 
     id="mobile-menu" 
-    class="fixed inset-y-0 right-0 z-[70] w-[280px] sm:w-80 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col h-full"
+    class="fixed inset-0 z-[100] w-screen h-screen bg-white md:hidden hidden flex-col"
+    style="display: none;"
     role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="mobile-menu-title"
   >
-    <div class="h-16 px-4 flex justify-between items-center border-b border-gray-100">
-      <span id="mobile-menu-title" class="font-semibold text-gray-900">{SITE.labName}</span>
+    <!-- Header with Close Button -->
+    <div class="flex items-center justify-between px-6 h-20 border-b border-gray-100 shrink-0 bg-white">
+      <div class="flex items-center gap-3">
+        {LOGO_IMAGE.enable && SITE.logo && <img src={SITE.logo} alt="Logo" class="h-10 w-10 object-contain" />}
+        <span class="font-bold text-gray-900 text-xl">{SITE.labName}</span>
+      </div>
       <button 
-        id="mobile-menu-close"
-        class="p-2 text-gray-600 hover:bg-gray-100 rounded-md"
-        onclick="window.closeMobileMenu()"
+        onclick="window.closeMobileMenu()" 
+        class="p-2 -mr-2 rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
         aria-label="Close menu"
       >
-        <X className="w-6 h-6" />
+        <X className="w-8 h-8" />
       </button>
     </div>
     
-    <div class="flex-1 overflow-y-auto px-4 py-4 space-y-2">
-      {nav.map(item => (
+    <!-- Scrollable Menu Content -->
+    <nav class="flex-1 overflow-y-auto px-6 py-8 flex flex-col gap-2 bg-white">
+      {nav.map((item) => (
         <a 
           href={item.link} 
-          class="block px-4 py-3 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+          class="flex items-center justify-between w-full py-4 px-4 text-lg font-medium text-gray-800 hover:text-blue-600 hover:bg-gray-50 rounded-xl transition-all border-b border-gray-100 last:border-0"
           data-i18n-key={`nav.${item.key}`}
           onclick="window.closeMobileMenu()"
         >
-          {item.text}
+          <span>{item.text}</span>
+          <ChevronDown className="w-5 h-5 -rotate-90 text-gray-400" />
         </a>
       ))}
       
       <!-- Custom Pages Mobile -->
-      {customPages && customPages.map(item => (
+      {customPages && customPages.map((item) => (
         <a 
           href={item.link} 
-          class="block px-4 py-3 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+          class="flex items-center justify-between w-full py-4 px-4 text-lg font-medium text-gray-800 hover:text-blue-600 hover:bg-gray-50 rounded-xl transition-all border-b border-gray-100 last:border-0"
           data-i18n-key={item.key}
           onclick="window.closeMobileMenu()"
         >
-          {item.text}
+           <span>{item.text}</span>
+           <ChevronDown className="w-5 h-5 -rotate-90 text-gray-400" />
         </a>
       ))}
 
       {i18n.enabled && (
-        <div class="border-t border-gray-100 mt-4 pt-4">
-          <div class="px-4 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
-            Language
-          </div>
-          <div class="grid grid-cols-2 gap-3 px-2 pb-2">
+        <div class="mt-8 pt-6 border-t border-gray-100">
+          <div class="text-sm font-bold text-gray-500 mb-4 uppercase tracking-wider px-2">Language</div>
+          <div class="grid grid-cols-2 gap-3">
             {Object.entries(languages).map(([code, label]) => (
               <button
-                class="text-center px-3 py-2.5 text-sm font-medium rounded-xl text-gray-600 bg-gray-50 hover:bg-blue-50 hover:text-blue-600 transition-all lang-option mobile-lang-option border border-transparent hover:border-blue-100"
+                class="px-4 py-3 rounded-xl text-base font-medium border border-gray-200 text-gray-600 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition-all lang-option mobile-lang-option text-center"
                 data-lang={code}
                 onclick="window.setLanguage && window.setLanguage(this.getAttribute('data-lang')); window.closeMobileMenu()"
               >
@@ -164,6 +177,11 @@ const { nav, i18n, customPages } = SITE;
           </div>
         </div>
       )}
+    </nav>
+
+    <!-- Footer Info -->
+    <div class="p-8 bg-gray-50 shrink-0 border-t border-gray-200">
+       <p class="text-sm text-gray-500 font-medium text-center">© {new Date().getFullYear()} {SITE.labName}</p>
     </div>
   </div>
 </header>
@@ -172,10 +190,8 @@ const { nav, i18n, customPages } = SITE;
   (function() {
     const btn = document.getElementById('mobile-menu-btn');
     const menu = document.getElementById('mobile-menu');
-    const backdrop = document.getElementById('mobile-menu-backdrop');
     const iconMenu = document.querySelector('.icon-menu');
     const iconClose = document.querySelector('.icon-close');
-    const closeBtn = document.getElementById('mobile-menu-close');
     const langLabel = document.getElementById('current-lang-label');
 
     let lastFocusedEl = null;
@@ -210,24 +226,69 @@ const { nav, i18n, customPages } = SITE;
     }
 
     function openMenu() {
-      menu?.classList.remove('translate-x-full');
-      backdrop?.classList.remove('hidden');
-      iconMenu?.classList.add('hidden');
-      iconClose?.classList.remove('hidden');
+      // Show menu container (display: flex)
+      if (menu) {
+        menu.style.display = 'flex';
+        // Force reflow
+        menu.offsetHeight;
+        menu.classList.remove('hidden');
+        
+        // Add simple fade in
+        menu.animate([
+          { opacity: 0 },
+          { opacity: 1 }
+        ], {
+          duration: 200,
+          fill: 'forwards',
+          easing: 'ease-out'
+        });
+      }
+      
+      // Animate hamburger to X
+      iconMenu?.classList.add('rotate-90', 'opacity-0');
+      iconClose?.classList.remove('hidden', 'rotate-90');
+      
+      // Lock body scroll
       document.body.classList.add('overflow-hidden');
       setAria(true);
+
       lastFocusedEl = document.activeElement;
-      (closeBtn || menu?.querySelector('button') || menu)?.focus?.();
+      // Focus the first link
+      const firstLink = menu?.querySelector('a');
+      firstLink?.focus?.();
+      
       document.addEventListener('keydown', onKeydown);
     }
 
     window.closeMobileMenu = function() {
-      menu?.classList.add('translate-x-full');
-      backdrop?.classList.add('hidden');
-      iconMenu?.classList.remove('hidden');
-      iconClose?.classList.add('hidden');
+      // Animate fade out
+      if (menu) {
+        const animation = menu.animate([
+          { opacity: 1 },
+          { opacity: 0 }
+        ], {
+          duration: 200,
+          fill: 'forwards',
+          easing: 'ease-in'
+        });
+        
+        animation.onfinish = () => {
+          menu.style.display = 'none';
+          menu.classList.add('hidden');
+        };
+      }
+      
+      // Animate X back to hamburger
+      iconMenu?.classList.remove('rotate-90', 'opacity-0');
+      iconClose?.classList.add('rotate-90');
+      setTimeout(() => {
+        iconClose?.classList.add('hidden');
+      }, 200);
+
+      // Unlock body scroll
       document.body.classList.remove('overflow-hidden');
       setAria(false);
+
       document.removeEventListener('keydown', onKeydown);
       if (lastFocusedEl && typeof lastFocusedEl.focus === 'function') {
         lastFocusedEl.focus();
@@ -239,12 +300,10 @@ const { nav, i18n, customPages } = SITE;
     window.toggleMobileMenu = function(e) {
       if (e) e.stopPropagation();
       if (!menu) return;
-      if (menu.classList.contains('translate-x-full')) openMenu();
+      const isHidden = menu.style.display === 'none' || menu.classList.contains('hidden');
+      if (isHidden) openMenu();
       else window.closeMobileMenu();
     };
-
-    closeBtn?.addEventListener('click', window.closeMobileMenu);
-    backdrop?.addEventListener('click', window.closeMobileMenu);
 
     // Close on link click in drawer
     menu?.querySelectorAll('a').forEach(link => {

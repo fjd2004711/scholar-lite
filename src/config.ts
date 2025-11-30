@@ -1,3 +1,5 @@
+import heroImage from './assets/hero-real.jpg';
+
 export const SITE = {
   website: 'https://scholar-lite.netlify.app/', // Replace with your actual deployed URL
   author: 'Scholar-Lite Team',
@@ -19,7 +21,7 @@ export const SITE = {
     title: 'Advancing Computer Vision & Deep Learning Research.',
     subtitle: 'We are the Scholar-Lite Lab.',
     action: 'View Publications', // Optional call to action text
-    image: '/assets/hero-real.jpg', // Hero image path
+    image: heroImage, // Hero image path
   },
 
   // Navigation
