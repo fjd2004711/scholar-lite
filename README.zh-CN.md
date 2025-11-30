@@ -11,10 +11,10 @@
 **[English](./README.md) | [简体中文](./README.zh-CN.md)**
 
 <p align="center">
-  <a href="https://app.netlify.com/start/deploy?repository=https://github.com/fjd2004711/scholar-lite">
+  <a href="https://app.netlify.com/start/deploy?repository=https://github.com/fjd2004711/scholar-lite" target="_blank">
     <img src="https://www.netlify.com/img/deploy/button.svg" alt="部署到 Netlify">
   </a>
-  <a href="https://vercel.com/new/clone?repository-url=https://github.com/fjd2004711/scholar-lite">
+  <a href="https://vercel.com/new/clone?repository-url=https://github.com/fjd2004711/scholar-lite" target="_blank">
     <img src="https://vercel.com/button" alt="部署到 Vercel">
   </a>
 </p>
@@ -22,18 +22,30 @@
 **为学术实验室与学者打造的下一代静态网站模板。**
 *极速响应、零配置 BibTeX 导入、内置多语言检索引擎。*
 
+---
+
+## 🚀 30秒上手指南 (无需编程)
+
+1.  **点击** 上方的 `部署到 Netlify` 或 `部署到 Vercel` 按钮。
+2.  **等待** 部署完成。
+3.  **前往** 您的新 GitHub 仓库，找到 `citations.bib` 文件。
+4.  **上传** 您自己的 BibTeX 文件并覆盖它。
+5.  **搞定！** 您的网站将在 1 分钟内自动更新。
+
+---
+
 <div align="center" style="margin-top: 20px;">
   <table>
     <tr>
       <td align="center">
-        <a href="https://scholar-lite-demo.netlify.app/">
+        <a href="https://scholar-lite-demo.netlify.app/" target="_blank">
           <img src="https://img.shields.io/badge/Live_Demo-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white" alt="Live Demo" />
         </a>
         <br />
         <strong>在线预览</strong>
       </td>
       <td align="center">
-        <a href="https://github.com/fjd2004711/scholar-lite">
+        <a href="https://github.com/fjd2004711/scholar-lite" target="_blank">
           <img src="https://img.shields.io/badge/Source_Code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Source Code" />
         </a>
         <br />

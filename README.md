@@ -11,10 +11,10 @@
 **[English](./README.md) | [简体中文](./README.zh-CN.md)**
 
 <p align="center">
-  <a href="https://app.netlify.com/start/deploy?repository=https://github.com/fjd2004711/scholar-lite">
+  <a href="https://app.netlify.com/start/deploy?repository=https://github.com/fjd2004711/scholar-lite" target="_blank">
     <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify">
   </a>
-  <a href="https://vercel.com/new/clone?repository-url=https://github.com/fjd2004711/scholar-lite">
+  <a href="https://vercel.com/new/clone?repository-url=https://github.com/fjd2004711/scholar-lite" target="_blank">
     <img src="https://vercel.com/button" alt="Deploy with Vercel">
   </a>
 </p>
@@ -22,18 +22,30 @@
 **The Next-Generation Static Website Template for Academic Labs & Scholars.**
 *Blazing fast, zero-config BibTeX import, and multilingual search engine built-in.*
 
+---
+
+## 🚀 Quick Start (No Coding Required)
+
+1.  **Click** the `Deploy to Netlify` or `Deploy with Vercel` button above.
+2.  **Wait** for the deployment to finish.
+3.  **Go to** your new GitHub repository and find `citations.bib`.
+4.  **Upload** your own BibTeX file to replace it.
+5.  **Done!** Your website updates automatically in 1 minute.
+
+---
+
 <div align="center" style="margin-top: 20px;">
   <table>
     <tr>
       <td align="center">
-        <a href="https://scholar-lite-demo.netlify.app/">
+        <a href="https://scholar-lite-demo.netlify.app/" target="_blank">
           <img src="https://img.shields.io/badge/Live_Demo-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white" alt="Live Demo" />
         </a>
         <br />
         <strong>Live Preview</strong>
       </td>
       <td align="center">
-        <a href="https://github.com/fjd2004711/scholar-lite">
+        <a href="https://github.com/fjd2004711/scholar-lite" target="_blank">
           <img src="https://img.shields.io/badge/Source_Code-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Source Code" />
         </a>
         <br />
