@@ -14,6 +14,7 @@ export const SITE = {
   labName: 'Scholar-Lite Lab',
   university: 'University Name',
   logo: '/assets/logo-real.svg', // Logo path
+  avatar: '/assets/logo-real.svg', // Avatar for SEO/Schema
   email: 'contact@lab.edu', // Contact email for Join Us page
 
   // Hero Section (Home Page) - Main content does not need to be translated for 8 languages by default

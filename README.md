@@ -10,6 +10,11 @@
 
 **[English](./README.md) | [简体中文](./README.zh-CN.md)**
 
+> ## **⚡ Create your site in 30 seconds**
+> ```bash
+> npm create astro@latest -- --template fjd2004711/scholar-lite
+> ```
+
 <p align="center">
   <a href="https://app.netlify.com/start/deploy?repository=https://github.com/fjd2004711/scholar-lite" target="_blank">
     <img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify">
@@ -84,6 +89,20 @@
 ### 🌍 Global Reach
 *   **Multilingual Search**: Built-in **Pagefind** search engine supporting **8 languages** (English, Chinese, Japanese, Korean, French, German, Spanish, Russian).
 *   **i18n Ready**: Native support for internationalization with type-safe translations.
+
+---
+
+## 🆚 Comparison: Scholar-Lite vs. Hugo Academic
+
+| Feature | 🎓 Scholar-Lite | 🐢 Hugo Academic (Wowchemy) |
+| :--- | :--- | :--- |
+| **Tech Stack** | **Astro v6 + React + Tailwind v4** (Modern & Mainstream) | Hugo + Go Templates (Steep learning curve) |
+| **Performance** | **100/100 Lighthouse** (Zero JS by default) | Good, but often bloated with heavy JS |
+| **BibTeX Import** | **Zero-Config** (Drag & drop `citations.bib`) | Complex Python scripts / Manual entry |
+| **Customization** | **Component-based** (Edit `.astro` / `.tsx` files directly) | Rigid Theme (Overriding internal templates is hard) |
+| **Multilingual** | **Native i18n + Pagefind** (Search in 8 languages) | Partial support, search often breaks |
+| **Dev Experience** | **Hot Reload (HMR)** in milliseconds | Slower rebuilds on large sites |
+| **Ecosystem** | **NPM / Node.js** (Access to millions of packages) | Go Modules (Limited web-focused packages) |
 
 ---
 

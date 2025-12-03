@@ -146,7 +146,7 @@ const activities = (await getCollection('activities'))
               <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-2">
                 <a href={`/activities`}>{item.data.title}</a>
               </h3>
-              <p class="text-gray-600 line-clamp-3 text-sm">{item.data.description || item.body.substring(0, 100)}</p>
+              <p class="text-gray-600 line-clamp-3 text-sm">{item.data.description || (item.body || '').substring(0, 100)}</p>
             </div>
           </div>
         ))}

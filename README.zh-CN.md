@@ -10,6 +10,11 @@
 
 **[English](./README.md) | [简体中文](./README.zh-CN.md)**
 
+> ## **⚡ 30秒极速建站**
+> ```bash
+> npm create astro@latest -- --template fjd2004711/scholar-lite
+> ```
+
 <p align="center">
   <a href="https://app.netlify.com/start/deploy?repository=https://github.com/fjd2004711/scholar-lite" target="_blank">
     <img src="https://www.netlify.com/img/deploy/button.svg" alt="部署到 Netlify">
@@ -84,6 +89,20 @@
 ### 🌍 全球化视野
 *   **多语言搜索引擎**：内置 **Pagefind** 静态搜索引擎，支持 **8 种语言**（中、英、日、韩、法、德、西、俄）的全文检索。
 *   **i18n 国际化**：原生支持中英双语切换，类型安全的翻译管理。
+
+---
+
+## 🆚 对比：Scholar-Lite vs. Hugo Academic
+
+| 特性 | 🎓 Scholar-Lite | 🐢 Hugo Academic (Wowchemy) |
+| :--- | :--- | :--- |
+| **技术栈** | **Astro v6 + React + Tailwind v4** (现代主流) | Hugo + Go 模板 (学习曲线陡峭) |
+| **性能** | **Lighthouse 100分** (默认零 JS) | 良好，但常因 JS 过重而臃肿 |
+| **BibTeX 导入** | **零配置** (拖入 `citations.bib` 即可) | 复杂的 Python 脚本 / 手动录入 |
+| **定制化** | **组件化开发** (直接修改 `.astro` / `.tsx`) | 僵化的主题系统 (覆盖内部模板困难) |
+| **多语言** | **原生 i18n + Pagefind** (8种语言搜索) | 支持不完整，搜索功能常失效 |
+| **开发体验** | **毫秒级热更新 (HMR)** | 大型站点重建速度慢 |
+| **生态系统** | **NPM / Node.js** (百万级插件生态) | Go Modules (Web 相关包有限) |
 
 ---
 

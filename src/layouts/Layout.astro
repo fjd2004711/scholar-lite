@@ -11,6 +11,21 @@ interface Props {
 
 const { title, description = SITE.description } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE.labName}` : `${SITE.labName} - ${SITE.university}`;
+
+// Define dynamic OG Image
+// If it's the homepage, use index.png. Otherwise, try to map the path to a slug.
+// For simplification, we'll just default to index.png for the home page, and generate specific ones for known routes.
+// However, to be robust, let's assume we have an og image for every page that maps to our static paths in og/[...slug].ts.
+// But standard pages like /research match /og/research.
+// What about nested pages like /research/cv? Our OG generator doesn't handle them yet (it only has static pages list).
+// So we will use a fallback.
+const currentPath = Astro.url.pathname.replace(/^\/|\/$/g, '');
+const ogSlug = currentPath === '' ? 'index' : currentPath;
+// Check if the current path is one of our supported OG pages (index, research, team, publications, news, join).
+// If not, fallback to index.
+const supportedOgPages = ['index', 'research', 'team', 'publications', 'news', 'join'];
+const finalOgSlug = supportedOgPages.includes(ogSlug) ? ogSlug : 'index';
+const ogImage = new URL(`/og/${finalOgSlug}.png`, Astro.url);
 ---
 
 <!doctype html>
@@ -25,7 +40,38 @@ const pageTitle = title ? `${title} | ${SITE.labName}` : `${SITE.labName} - ${SI
     
     <title>{pageTitle}</title>
 
-    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={pageTitle} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+
+    {
+      Astro.url.pathname === '/' && (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": SITE.author,
+          "url": SITE.website,
+          "image": new URL(SITE.avatar || SITE.logo, SITE.website).href,
+          "jobTitle": "Principal Investigator",
+          "worksFor": {
+            "@type": "Organization",
+            "name": SITE.labName,
+            "url": SITE.website
+          },
+          "description": SITE.description
+        })} />
+      )
+    }
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
