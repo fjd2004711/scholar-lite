@@ -9,11 +9,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const BIB_FILE = path.join(process.cwd(), 'citations.bib');
-const OUTPUT_DIR = path.join(process.cwd(), 'src', 'content', 'publications');
+const PUBLICATIONS_DIR = path.join(process.cwd(), 'src', 'content', 'publications');
+const BOOKS_DIR = path.join(process.cwd(), 'src', 'content', 'books');
 
-// Ensure output directory exists
-if (!fs.existsSync(OUTPUT_DIR)) {
-  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+// Ensure output directories exist
+if (!fs.existsSync(PUBLICATIONS_DIR)) {
+  fs.mkdirSync(PUBLICATIONS_DIR, { recursive: true });
+}
+if (!fs.existsSync(BOOKS_DIR)) {
+  fs.mkdirSync(BOOKS_DIR, { recursive: true });
 }
 
 // Helper to clean BibTeX strings (remove braces)
@@ -59,11 +63,28 @@ function importBibtex() {
       return;
     }
 
+    const entryType = (entry.entryType || '').toLowerCase();
+    const isBook = entryType === 'book';
+    const OUTPUT_DIR = isBook ? BOOKS_DIR : PUBLICATIONS_DIR;
+    
+    let type = isBook ? 'book' : 'paper';
+    if (!isBook) {
+      if (entryType === 'patent') {
+        type = 'patent';
+      } else if (entryType === 'software') {
+        type = 'software';
+      } else if (entryType === 'misc') {
+        const howpublished = (tags.howpublished || '').toLowerCase();
+        if (howpublished.includes('patent')) type = 'patent';
+        if (howpublished.includes('software')) type = 'software';
+      }
+    }
+
     const title = cleanString(tags.title);
     const year = parseInt(tags.year, 10);
     const authors = parseAuthors(tags.author);
-    const venue = cleanString(tags.booktitle || tags.journal || tags.school || 'Unknown Venue');
-    const type = entry.entryType === 'book' ? 'book' : 'paper';
+    // For books, publisher is often the venue equivalent
+    const venue = cleanString(tags.booktitle || tags.journal || tags.school || tags.publisher || tags.howpublished || tags.organization || tags.institution || 'Unknown Venue');
     const description = cleanString(tags.abstract || `Published in ${venue}.`);
     
     // Extract additional fields
@@ -73,7 +94,7 @@ function importBibtex() {
 
     // Validate cover image existence
     if (cover) {
-      // Resolve path relative to src/content/publications
+      // Resolve path relative to src/content/publications or src/content/books
       // ../../assets/xxx.jpg -> src/assets/xxx.jpg
       const relativeToRoot = cover.replace('../../', 'src/');
       const absolutePath = path.join(process.cwd(), relativeToRoot);
@@ -86,20 +107,16 @@ function importBibtex() {
       cover = DEFAULT_COVER;
     }
     
-    // PDF link: check 'pdf', 'file', 'url'
-    // Note: 'file' often comes from Zotero/JabRef in format ":/path/to/file.pdf:PDF"
+    // PDF link
     let pdf = cleanString(tags.pdf || tags.file || tags.url || '');
     if (pdf.startsWith(':')) {
-      // Cleanup Zotero file format if needed, or just leave as is if it's a valid path
-      // Simple heuristic: if it looks like ":path:type", take the middle
       const parts = pdf.split(':');
       if (parts.length >= 2 && parts[1].trim() !== '') {
         pdf = parts[1];
       }
     }
     
-    // Code link: check 'code', 'code_url', 'github', 'repository'
-    const code = cleanString(tags.code || tags.code_url || tags.github || tags.repository || '#');
+    const code = cleanString(tags.code || tags.code_url || tags.github || tags.repository || '');
     const website = cleanString(tags.website || tags.webpage || tags.project || '');
     const slides = cleanString(tags.slides || tags.presentation || tags.ppt || '');
     const video = cleanString(tags.video || tags.recording || '');
@@ -111,9 +128,11 @@ function importBibtex() {
     if (award) {
       badges.push({ text: award, type: 'gold' });
     }
+
+    const doi = cleanString(tags.doi || '');
     
-    // Check for keywords in note or keywords field
     const note = cleanString(tags.note || tags.keywords || '');
+
     if (note.toLowerCase().includes('best paper') && !award.toLowerCase().includes('best paper')) {
        badges.push({ text: 'Best Paper', type: 'gold' });
     }
@@ -133,8 +152,22 @@ function importBibtex() {
     const filename = `${year}-${firstAuthor}-${titleSlug}.md`;
     const filePath = path.join(OUTPUT_DIR, filename);
 
-    // Check if file already exists to avoid overwriting manual edits (optional policy)
-    // For now, we overwrite or create new.
+    // Determine featured status
+    let isFeatured = false;
+    if (tags.featured === 'true' || note.toLowerCase().includes('featured') || note.toLowerCase().includes('selected')) {
+      isFeatured = true;
+    }
+    // Check existing file to preserve manual edits
+    if (fs.existsSync(filePath)) {
+      try {
+        const existingContent = fs.readFileSync(filePath, 'utf-8');
+        if (/featured:\s*true/.test(existingContent)) {
+          isFeatured = true;
+        }
+      } catch (e) {
+        console.warn(`Warning: Could not read existing file ${filePath}`);
+      }
+    }
     
     const frontmatter = [
       '---',
@@ -142,30 +175,34 @@ function importBibtex() {
       `authors: [${authors.map(a => `"${a}"`).join(', ')}]`,
       `year: ${year}`,
       `venue: "${venue.replace(/"/g, '\\"')}"`,
-      `type: "${type}"`,
+      // Only add type for publications, not books
+      isBook ? '' : `type: "${type}"`,
       `cover: "${cover}"`,
       'links:',
-      `  pdf: "${pdf || '#'}"`,
+      `  pdf: "${pdf}"`,
       `  code: "${code}"`,
       `  website: "${website}"`,
       `  demo: "${demo}"`,
       `  slides: "${slides}"`,
       `  video: "${video}"`,
+      doi ? `doi: "${doi}"` : '',
+      award ? `award: "${award.replace(/"/g, '\\"')}"` : '',
       badges.length > 0 ? 'badges:' : '',
       ...badges.map(b => `  - { text: "${b.text}", type: "${b.type}" }`),
       `description: "${description.replace(/"/g, '\\"')}"`,
-      'featured: false',
+      // Only add featured for publications, not books
+      isBook ? '' : `featured: ${isFeatured}`,
       '---',
       '',
       description
     ].filter(line => line !== '').join('\n');
 
     fs.writeFileSync(filePath, frontmatter);
-    console.log(`Generated: ${filename}`);
+    console.log(`Generated: ${filename} in ${isBook ? 'books' : 'publications'}`);
     count++;
   });
 
-  console.log(`\nSuccessfully imported ${count} publications.`);
+  console.log(`\nSuccessfully imported ${count} entries.`);
 }
 
 importBibtex();

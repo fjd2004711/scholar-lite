@@ -134,18 +134,20 @@ npm run build
 
 ---
 
-## 📚 Smart Publication Management
+## 📚 Smart Publication & Book Management
 
-Scholar-Lite features a powerful **BibTeX Import Engine** located in `scripts/import-bibtex.js`.
+Scholar-Lite features a powerful **BibTeX Import Engine** located in `scripts/import-bibtex.js`, supporting both **Papers** and **Books**.
 
-### How to Import Publications
-
-1.  **Export BibTeX**: Export your papers as `citations.bib` from Zotero, Mendeley, or Google Scholar.
+### How to Import
+1.  **Export BibTeX**: Export your bibliography as `citations.bib` from Zotero, Mendeley, or Google Scholar.
 2.  **Place File**: Save `citations.bib` in the project root.
 3.  **Run Import**:
     ```bash
     npm run import-bibtex
     ```
+4.  **Auto-Classification**: The system automatically classifies entries based on BibTeX type:
+    *   `@article`, `@inproceedings`, etc. -> Imported to **Publications** (`src/content/publications`)
+    *   `@book` -> Imported to **Books** (`src/content/books`)
 
 ### Advanced BibTeX Features
 
@@ -153,7 +155,8 @@ The importer maps BibTeX fields to website elements intelligently:
 
 | BibTeX Field | Website Element | Smart Behavior |
 |--------------|-----------------|----------------|
-| `cover`/`image` | Paper Cover | Auto-detects local images in `src/assets/`. Uses default if missing. |
+| `cover`/`image` | Cover Image | Auto-detects local images in `src/assets/`. **Highly recommended for books**. |
+| `publisher` | Publisher | For books, `publisher` is automatically displayed as the venue. |
 | `pdf`/`url`/`file` | PDF Button | Cleans Zotero path formats (e.g., `files/mypaper.pdf`). |
 | `code`/`github` | Code Button | Generates a GitHub/Code link button. |
 | `website`/`project` | **Project Page** | Generates a Globe icon link to the project homepage. |
@@ -162,7 +165,9 @@ The importer maps BibTeX fields to website elements intelligently:
 | `slides`/`ppt` | **Slides** | Generates a Slides download button. |
 | `award`/`note` | **Badges** | Auto-generates Gold/Blue/Red badges for "Best Paper", "Oral", etc. |
 
-**BibTeX Example:**
+### BibTeX Entry Examples
+
+#### 1. Paper
 ```bibtex
 @article{gpt4,
   title={GPT-4 Technical Report},
@@ -171,10 +176,21 @@ The importer maps BibTeX fields to website elements intelligently:
   journal={ArXiv},
   url={https://arxiv.org/pdf/2303.08774.pdf},
   code={https://github.com/openai/evals},
-  website={https://openai.com/research/gpt-4},
-  demo={https://chat.openai.com},
   cover={../../assets/gpt4-cover.jpg},
   note={Tech Report}
+}
+```
+
+#### 2. Book
+Simply set the entry type to `@book`, and the system will automatically place it in the "Books" section.
+```bibtex
+@book{deeplearning,
+  title={Deep Learning},
+  author={Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron},
+  publisher={MIT Press},
+  year={2016},
+  url={http://www.deeplearningbook.org},
+  cover={../../assets/book-deep-learning.jpg}
 }
 ```
 
@@ -190,7 +206,52 @@ The importer maps BibTeX fields to website elements intelligently:
 ### 📝 Content Management
 *   **News**: Add new Markdown files in `src/content/news/`. The filename doesn't matter, but sorting is based on the `date` field.
 *   **Team**: Add members in `src/content/team/`. Use `weight` to control display order (lower numbers appear first).
+*   **Research Fields**: Add Markdown files in `src/content/research/`. Use `order` field to control display order.
 *   **Translations**: Edit `src/i18n/ui.ts` to modify UI text (e.g., navigation menu, buttons) for all supported languages.
+
+### 🎓 More Academic Achievements
+Beyond papers and books, the system supports managing other academic achievements. Simply create Markdown files in the corresponding folders.
+
+#### 1. Software Copyrights
+*   **Location**: `src/content/softwares/`
+*   **Example**:
+    ```markdown
+    ---
+    title: "Intelligent Image Processing System V1.0"
+    developers: ["John Doe", "Jane Smith"]
+    number: "2023SR123456"
+    date: 2023-06-15
+    description: "An automated image processing platform based on deep learning."
+    ---
+    ```
+
+#### 2. Invention Patents
+*   **Location**: `src/content/patents/`
+*   **Example**:
+    ```markdown
+    ---
+    title: "A Method for Image Recognition Based on Attention Mechanism"
+    inventors: ["John Doe", "Bob Johnson"]
+    number: "CN102345678B"
+    date: 2024-01-20
+    status: "Granted" # Options: Granted, Pending, Filed
+    ---
+    ```
+
+#### 3. Group Honors
+*   **Location**: `src/content/honors/`
+*   **Example**:
+    ```markdown
+    ---
+    title: "18th Challenge Cup National College Student Extracurricular Academic Science and Technology Works Competition"
+    award: "Grand Prize"
+    date: 2023-10-30
+    year: "2023"
+    type: "Challenge Cup"  # Options: Challenge Cup, Internet+, Other
+    level: "Special"       # Options: Special, First, Second, Third
+    ---
+    ```
+
 
 ### 🖼️ Image Optimization
 Scholar-Lite automatically optimizes images imported from `src/assets/`.

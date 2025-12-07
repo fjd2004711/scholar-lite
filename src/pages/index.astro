@@ -6,7 +6,7 @@ import { ArrowRight, Calendar } from 'lucide-react';
 import { SITE } from '../config';
 
 const papers = (await getCollection('publications'))
-  .filter(p => p.data.type === 'paper')
+  .filter(p => p.data.type === 'paper' && p.data.featured)
   .sort((a, b) => b.data.year - a.data.year)
   .slice(0, 3);
 
@@ -81,33 +81,45 @@ const activities = (await getCollection('activities'))
       </div>
 
       <div class="grid gap-6 md:grid-cols-3">
-        {papers.map(paper => (
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 overflow-hidden flex flex-col h-full">
+        {papers.map(paper => {
+          const link = paper.data.links?.website || paper.data.links?.pdf || '/achievements';
+          const isExternal = link.startsWith('http');
+          return (
+          <a 
+            href={link}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined} 
+            class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 overflow-hidden flex flex-col h-full group"
+          >
              {paper.data.cover && (
                <div class="h-48 overflow-hidden border-b border-gray-100 bg-gray-50">
                  <Image 
                    src={paper.data.cover} 
                    alt={paper.data.title}
-                   class="w-full h-full object-cover"
-                   quality={80}
-                  format="webp"
-                  widths={[320, 480]}
+                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                   quality={60}
+                   format="webp"
+                   widths={[320, 480]}
                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                  />
                </div>
              )}
              <div class="p-6 flex flex-col flex-grow">
-               <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+               <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                  {paper.data.title}
                </h3>
-               <p class="text-gray-600 mb-4 text-sm line-clamp-2 flex-grow">{paper.data.authors.join(', ')}</p>
-               <div class="flex items-center justify-between text-sm mt-auto">
-                  <span class="font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">{paper.data.venue}</span>
-                  <span class="text-gray-500">{paper.data.year}</span>
+               <p class="text-gray-600 mb-4 text-sm line-clamp-2 flex-grow" title={paper.data.authors.join(', ')}>
+                 {paper.data.authors.length > 3 
+                   ? `${paper.data.authors.slice(0, 3).join(', ')}, et al.` 
+                   : paper.data.authors.join(', ')}
+               </p>
+               <div class="flex items-center justify-between text-sm mt-auto gap-4">
+                  <span class="font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded truncate text-left block max-w-full" title={paper.data.venue}>{paper.data.venue}</span>
+                  <span class="text-gray-500 shrink-0">{paper.data.year}</span>
                </div>
              </div>
-          </div>
-        ))}
+          </a>
+        )})}
       </div>
     </div>
   </section>
@@ -123,10 +135,12 @@ const activities = (await getCollection('activities'))
       </div>
 
       <div class="grid gap-8 md:grid-cols-3">
-        {activities.map(item => (
+        {activities.map(item => {
+          const link = `/activities/${item.id.replace(/\.[^/.]+$/, "")}`;
+          return (
           <div class="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
             {item.data.cover && (
-              <div class="h-48 overflow-hidden">
+              <a href={link} class="block h-48 overflow-hidden">
                 <Image 
                   src={item.data.cover} 
                   alt={item.data.title}
@@ -136,7 +150,7 @@ const activities = (await getCollection('activities'))
                   widths={[320, 480, 600]}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-              </div>
+              </a>
             )}
             <div class="p-6">
               <div class="text-sm text-gray-500 mb-2 flex items-center gap-2">
@@ -144,12 +158,12 @@ const activities = (await getCollection('activities'))
                  {item.data.date.toLocaleDateString()}
               </div>
               <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-2">
-                <a href={`/activities`}>{item.data.title}</a>
+                <a href={link}>{item.data.title}</a>
               </h3>
               <p class="text-gray-600 line-clamp-3 text-sm">{item.data.description || (item.body || '').substring(0, 100)}</p>
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </div>
   </section>

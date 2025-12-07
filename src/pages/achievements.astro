@@ -7,12 +7,10 @@ import HonorCard from '../components/HonorCard.astro';
 import { Book, FileCode, ScrollText, Award, BookOpen, CheckCircle, Clock, FileInput } from 'lucide-react';
 
 // Fetch Collections
-const allPublications = await getCollection('publications');
-const papers = allPublications
+const papers = (await getCollection('publications'))
   .filter(p => p.data.type === 'paper')
   .sort((a, b) => b.data.year - a.data.year);
-const books = allPublications
-  .filter(p => p.data.type === 'book')
+const books = (await getCollection('books'))
   .sort((a, b) => b.data.year - a.data.year);
 
 const softwares = (await getCollection('softwares'))
@@ -166,9 +164,9 @@ const sections = [
           <Award className="w-8 h-8 text-blue-600" />
           <h2 class="text-3xl font-bold text-gray-900" data-i18n-key="achievements.honors">Group Honors</h2>
         </div>
-        <div class="grid gap-6 sm:grid-cols-2">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {honors.map(honor => <HonorCard honor={honor} />)}
-           {honors.length === 0 && <p class="text-gray-500 italic col-span-full" data-i18n-key="achievements.noHonors">No honors listed yet.</p>}
+          {honors.length === 0 && <p class="text-gray-500 italic" data-i18n-key="achievements.noHonors">No group honors listed yet.</p>}
         </div>
       </section>
 

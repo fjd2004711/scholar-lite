@@ -7,7 +7,7 @@ type: "paper"
 cover: "../../assets/vit-cover.jpg"
 links:
   pdf: "https://arxiv.org/abs/2501.00000"
-  code: "#"
+  code: ""
   website: "https://example.com/vit-small"
   demo: "https://huggingface.co/spaces/example/vit-small-demo"
   slides: ""

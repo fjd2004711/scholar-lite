@@ -134,18 +134,20 @@ npm run build
 
 ---
 
-## 📚 智能论文管理系统
+## 📚 智能论文与著作管理
 
-Scholar-Lite 在 `scripts/import-bibtex.js` 中内置了强大的 **BibTeX 导入引擎**。
+Scholar-Lite 在 `scripts/import-bibtex.js` 中内置了强大的 **BibTeX 导入引擎**，支持**论文**与**书籍**的一键导入。
 
-### 如何导入论文
-
-1.  **导出 BibTeX**：从 Zotero、Mendeley 或 Google Scholar 导出您的论文为 `citations.bib`。
+### 如何导入
+1.  **导出 BibTeX**：从 Zotero、Mendeley 或 Google Scholar 导出您的文献为 `citations.bib`。
 2.  **放置文件**：将 `citations.bib` 文件保存到项目根目录。
 3.  **运行导入**：
     ```bash
     npm run import-bibtex
     ```
+4.  **自动分类**：系统会自动识别 BibTeX 中的类型：
+    *   `@article`, `@inproceedings` 等 -> 导入到 **论文列表** (`src/content/publications`)
+    *   `@book` -> 导入到 **著作列表** (`src/content/books`)
 
 ### 高级 BibTeX 特性
 
@@ -153,7 +155,8 @@ Scholar-Lite 在 `scripts/import-bibtex.js` 中内置了强大的 **BibTeX 导�
 
 | BibTeX 字段 | 网站元素 | 智能行为 |
 |-------------|----------|----------|
-| `cover`/`image` | 论文封面 | 自动检测 `src/assets/` 下的文件是否存在。如果缺失，自动使用默认封面。 |
+| `cover`/`image` | 封面图片 | 自动检测 `src/assets/` 下的文件。**书籍强烈建议设置此字段**。 |
+| `publisher` | 出版社 | 书籍的 `publisher` 字段会自动显示在 venue 位置。 |
 | `pdf`/`url`/`file` | PDF 按钮 | 自动清洗 Zotero 文件路径格式（如 `files/mypaper.pdf`）。 |
 | `code`/`github` | 代码按钮 | 识别代码仓库链接，生成 GitHub/Code 按钮。 |
 | `website`/`project` | **项目主页** | 识别项目主页链接，生成地球仪图标按钮。 |
@@ -162,7 +165,9 @@ Scholar-Lite 在 `scripts/import-bibtex.js` 中内置了强大的 **BibTeX 导�
 | `slides`/`ppt` | **幻灯片** | 生成 PPT 下载按钮。 |
 | `award`/`note` | **荣誉徽章** | 自动生成“最佳论文”（金色）、“口头报告”（蓝色）等高亮标签。 |
 
-**BibTeX 条目示例：**
+### BibTeX 条目示例
+
+#### 1. 论文 (Paper)
 ```bibtex
 @article{gpt4,
   title={GPT-4 Technical Report},
@@ -171,10 +176,21 @@ Scholar-Lite 在 `scripts/import-bibtex.js` 中内置了强大的 **BibTeX 导�
   journal={ArXiv},
   url={https://arxiv.org/pdf/2303.08774.pdf},
   code={https://github.com/openai/evals},
-  website={https://openai.com/research/gpt-4},
-  demo={https://chat.openai.com},
   cover={../../assets/gpt4-cover.jpg},
   note={Tech Report}
+}
+```
+
+#### 2. 书籍 (Book)
+只需要将类型设置为 `@book`，系统会自动将其放入“著作”板块。
+```bibtex
+@book{deeplearning,
+  title={Deep Learning},
+  author={Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron},
+  publisher={MIT Press},
+  year={2016},
+  url={http://www.deeplearningbook.org},
+  cover={../../assets/book-deep-learning.jpg}
 }
 ```
 
@@ -190,7 +206,51 @@ Scholar-Lite 在 `scripts/import-bibtex.js` 中内置了强大的 **BibTeX 导�
 ### 📝 内容管理技巧
 *   **新闻动态**: 在 `src/content/news/` 添加新的 Markdown 文件。文件名不影响排序，系统会自动根据 frontmatter 中的 `date` 字段排序。
 *   **团队成员**: 在 `src/content/team/` 添加成员。使用 `weight` 字段控制显示顺序（数字越小越靠前）。
+*   **研究方向**: 在 `src/content/research/` 添加 Markdown 文件。使用 `order` 字段控制显示顺序。
 *   **多语言文案**: 修改 `src/i18n/ui.ts` 可自定义导航栏、按钮等界面元素的翻译。
+
+### 🎓 更多学术成果管理
+除了论文和书籍，系统还支持以下学术成果的管理。直接在对应文件夹中创建 Markdown 文件即可。
+
+#### 1. 软件著作权 (Software Copyrights)
+*   **位置**: `src/content/softwares/`
+*   **示例**:
+    ```markdown
+    ---
+    title: "智能图像处理系统 V1.0"
+    developers: ["张三", "李四"]
+    number: "2023SR123456"
+    date: 2023-06-15
+    description: "基于深度学习的自动化图像处理平台。"
+    ---
+    ```
+
+#### 2. 发明专利 (Invention Patents)
+*   **位置**: `src/content/patents/`
+*   **示例**:
+    ```markdown
+    ---
+    title: "一种基于注意力机制的图像识别方法"
+    inventors: ["张三", "王五"]
+    number: "CN102345678B"
+    date: 2024-01-20
+    status: "Granted" # 可选: Granted(已授权), Pending(实审中), Filed(已受理)
+    ---
+    ```
+
+#### 3. 集体荣誉 (Group Honors)
+*   **位置**: `src/content/honors/`
+*   **示例**:
+    ```markdown
+    ---
+    title: "第十八届挑战杯全国大学生课外学术科技作品竞赛"
+    award: "特等奖"
+    date: 2023-10-30
+    year: "2023"
+    type: "Challenge Cup"  # 可选: Challenge Cup, Internet+, Other
+    level: "Special"       # 可选: Special(特等), First(一等), Second(二等), Third(三等)
+    ---
+    ```
 
 ### 🖼️ 图片优化
 Scholar-Lite 会自动优化从 `src/assets/` 导入的图片。

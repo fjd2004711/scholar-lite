@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { honor } = Astro.props;
-const { level, type, year, title, award, image } = honor.data;
+const { level, type, year, title, award } = honor.data;
 
 const getTrophyConfig = (level: string) => {
   switch (level) {
@@ -30,11 +30,7 @@ const Icon = config.icon;
 
 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start gap-4 hover:shadow-md transition-shadow group">
   <div class={`flex-shrink-0 w-16 h-16 bg-gradient-to-br ${config.bg} rounded-full flex items-center justify-center ${config.color} border-4 border-white shadow-sm overflow-hidden relative ring-1 ${config.border}`}>
-     {image ? (
-        <img src={image} alt={award} class="w-full h-full object-cover" />
-     ) : (
-        <Icon className="w-8 h-8" />
-     )}
+     <Icon className="w-8 h-8" />
   </div>
   <div class="flex-1">
     <div class="flex items-center gap-2 mb-2 flex-wrap">
