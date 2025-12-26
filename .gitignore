@@ -28,7 +28,9 @@ Desktop.ini
 
 # Editor directories and files
 .idea/
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
 *.swp
 *.swo
 
