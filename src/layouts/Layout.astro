@@ -19,7 +19,7 @@ const pageTitle = title ? `${title} | ${SITE.labName}` : `${SITE.labName} - ${SI
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self';" />
     <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     
@@ -33,51 +33,15 @@ const pageTitle = title ? `${title} | ${SITE.labName}` : `${SITE.labName} - ${SI
       <slot />
     </main>
     
-    <footer class="border-t border-gray-200 mt-12 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-10 md:grid-cols-3">
-        <div>
-          <p class="font-display text-2xl text-gray-900">{SITE.labName}</p>
-          <p class="text-sm text-gray-500 mt-1">{SITE.university}</p>
-          <p class="text-sm text-gray-600 mt-4 max-w-xs leading-relaxed">{SITE.description}</p>
-        </div>
-        <nav class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm content-start" aria-label="Footer">
-          {SITE.nav.filter(n => n.key !== 'search').map(n => (
-            <a href={n.link} class="text-gray-600 hover:text-blue-700 transition-colors" data-i18n-key={`nav.${n.key}`}>{n.text}</a>
-          ))}
-        </nav>
-        <div class="text-sm text-gray-600 md:text-right">
-          <a href={`mailto:${SITE.email}`} class="hover:text-blue-700 transition-colors">{SITE.email}</a>
-        </div>
-      </div>
-      <div class="border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row justify-between gap-2 text-xs text-gray-500">
-          <span>© {new Date().getFullYear()} {SITE.labName}</span>
-          <a href="https://github.com/fjd2004711/scholar-lite" target="_blank" rel="noopener" class="hover:text-gray-700 transition-colors">
+    <footer class="border-t border-gray-100 py-8 mt-12 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
+        <p>
+          <a href="https://github.com/fjd2004711/scholar-lite" target="_blank" class="hover:text-gray-700 inline-flex items-center gap-1 transition-colors">
             Built with Scholar-Lite Open Source Template
           </a>
-        </div>
+        </p>
       </div>
     </footer>
-
-    <script is:inline>
-      // Scroll-reveal: fade elements in as they enter the viewport
-      (function () {
-        var els = document.querySelectorAll('.reveal');
-        if (!('IntersectionObserver' in window)) {
-          els.forEach(function (e) { e.classList.add('is-visible'); });
-          return;
-        }
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (en) {
-            if (en.isIntersecting) { en.target.classList.add('is-visible'); io.unobserve(en.target); }
-          });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-        els.forEach(function (e, i) {
-          e.style.transitionDelay = (i % 3) * 80 + 'ms';
-          io.observe(e);
-        });
-      })();
-    </script>
 
     <script is:inline define:vars={{ ui, defaultLang }}>
       // Make ui available globally for debugging if needed, but main logic is here

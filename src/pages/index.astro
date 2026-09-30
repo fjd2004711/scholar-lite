@@ -10,118 +10,102 @@ const papers = (await getCollection('publications'))
   .sort((a, b) => b.data.year - a.data.year)
   .slice(0, 3);
 
-const allPubs = await getCollection('publications');
-const team = await getCollection('team');
-const honors = await getCollection('honors');
-const stats = [
-  { value: allPubs.length, key: 'stats.publications', label: 'Publications' },
-  { value: team.length, key: 'stats.members', label: 'Members' },
-  { value: honors.length, key: 'stats.honors', label: 'Honors' },
-];
-
 const activities = (await getCollection('activities'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 ---
 
 <Layout title="Home">
-  <!-- Hero -->
-  <section class="relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-24 lg:pb-28 grid lg:grid-cols-12 gap-12 items-center">
-      <div class="lg:col-span-7">
-        <p class="eyebrow mb-6 reveal">{SITE.labName} · {SITE.university}</p>
-        <h1 class="text-5xl sm:text-6xl lg:text-[4.5rem] text-gray-900 leading-[1.05] reveal">
-          {SITE.hero.title}
+  <!-- Hero Section -->
+  <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0 z-0">
+      {SITE.hero.image ? (
+        <Image 
+          class="w-full h-full object-cover" 
+          src={SITE.hero.image} 
+          alt={SITE.hero.title}
+          loading="eager"
+          fetchpriority="high"
+          decoding="sync"
+          quality={60}
+          format="webp"
+          widths={[640, 1024, 1920]}
+          sizes="100vw"
+        />
+      ) : (
+        <div class="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800"></div>
+      )}
+      <!-- Dark Gradient Overlay for Readability -->
+      <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent"></div>
+      <!-- Subtle Texture (CSS only) -->
+      <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 32px 32px;"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <div class="max-w-3xl">
+        <h1 class="text-5xl font-extrabold text-white sm:text-6xl md:text-7xl mb-6 drop-shadow-lg leading-tight">
+          <span class="block xl:inline">{SITE.hero.title}</span>
         </h1>
-        <p class="mt-6 text-xl text-gray-600 max-w-xl leading-relaxed reveal">
+        <p class="mt-4 text-xl text-gray-300 sm:max-w-2xl md:text-2xl drop-shadow-md">
           {SITE.hero.subtitle}
         </p>
-        <div class="mt-10 flex flex-wrap gap-3 reveal">
-          <a href="/achievements" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors shadow-sm" data-i18n-key="hero.viewPubs">
+        <div class="mt-10 flex gap-4">
+          <a href="/achievements" class="flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-full text-black bg-white hover:bg-gray-100 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]" data-i18n-key="hero.viewPubs">
             View Publications
           </a>
-          <a href="/team" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-gray-300 text-gray-800 font-medium hover:bg-gray-100 transition-colors" data-i18n-key="hero.meetTeam">
+          <a href="/team" class="flex items-center justify-center px-8 py-4 border-2 border-white/30 text-lg font-medium rounded-full text-white hover:bg-white/10 transition-all duration-300 backdrop-blur-sm" data-i18n-key="hero.meetTeam">
             Meet the Team
           </a>
         </div>
       </div>
-
-      <div class="lg:col-span-5 reveal">
-        <div class="relative">
-          <div class="absolute -inset-3 rounded-[2rem] bg-blue-100/60 -rotate-2" aria-hidden="true"></div>
-          <div class="relative aspect-[4/5] rounded-[1.75rem] overflow-hidden border border-gray-200 shadow-[0_20px_50px_-20px_rgba(31,29,26,0.35)]">
-            {SITE.hero.image ? (
-              <Image
-                class="w-full h-full object-cover"
-                src={SITE.hero.image}
-                alt={SITE.hero.title}
-                loading="eager"
-                fetchpriority="high"
-                quality={70}
-                format="webp"
-                widths={[480, 768, 1024]}
-                sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-            ) : (
-              <div class="w-full h-full bg-gradient-to-br from-blue-100 to-gray-100"></div>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
 
-    <!-- Stats -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-      <dl class="grid grid-cols-3 border-y border-gray-200 divide-x divide-gray-200 reveal">
-        {stats.map(s => (
-          <div class="py-6 px-4 sm:px-8 text-center sm:text-left">
-            <dt class="text-xs tracking-wider uppercase text-gray-500" data-i18n-key={s.key}>{s.label}</dt>
-            <dd class="font-display text-4xl sm:text-5xl text-gray-900 mt-1">{s.value}</dd>
-          </div>
-        ))}
-      </dl>
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce text-white/50">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+      </svg>
     </div>
   </section>
 
   <!-- Selected Publications -->
-  <section class="py-20 bg-gray-50 border-y border-gray-200/70">
+  <section class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-end mb-10 reveal">
-        <div>
-          <p class="eyebrow mb-3" data-i18n-key="nav.achievements">Achievements</p>
-          <h2 class="text-3xl sm:text-4xl text-gray-900" data-i18n-key="section.selectedPubs">Selected Publications</h2>
-        </div>
-        <a href="/achievements" class="text-blue-700 hover:text-blue-800 font-medium flex items-center gap-1 group">
+      <div class="flex justify-between items-end mb-8">
+        <h2 class="text-3xl font-bold text-gray-900" data-i18n-key="section.selectedPubs">Selected Publications</h2>
+        <a href="/achievements" class="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 group">
           <span data-i18n-key="section.viewAll">View all</span> <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </a>
       </div>
 
       <div class="grid gap-6 md:grid-cols-3">
         {papers.map(paper => (
-          <div class="card overflow-hidden flex flex-col h-full reveal">
-            {paper.data.cover && (
-              <div class="h-48 overflow-hidden border-b border-gray-200 bg-gray-100">
-                <Image
-                  src={paper.data.cover}
-                  alt={paper.data.title}
-                  class="w-full h-full object-cover"
-                  quality={80}
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all hover:-translate-y-1 overflow-hidden flex flex-col h-full">
+             {paper.data.cover && (
+               <div class="h-48 overflow-hidden border-b border-gray-100 bg-gray-50">
+                 <Image 
+                   src={paper.data.cover} 
+                   alt={paper.data.title}
+                   class="w-full h-full object-cover"
+                   quality={80}
                   format="webp"
                   widths={[320, 480]}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              </div>
-            )}
-            <div class="p-6 flex flex-col flex-grow">
-              <h3 class="text-xl text-gray-900 mb-2 line-clamp-2 leading-snug">
-                {paper.data.title}
-              </h3>
-              <p class="text-gray-600 mb-4 text-sm line-clamp-2 flex-grow">{paper.data.authors.join(', ')}</p>
-              <div class="flex items-center justify-between text-sm mt-auto">
-                <span class="font-medium text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">{paper.data.venue}</span>
-                <span class="text-gray-500">{paper.data.year}</span>
-              </div>
-            </div>
+                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                 />
+               </div>
+             )}
+             <div class="p-6 flex flex-col flex-grow">
+               <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                 {paper.data.title}
+               </h3>
+               <p class="text-gray-600 mb-4 text-sm line-clamp-2 flex-grow">{paper.data.authors.join(', ')}</p>
+               <div class="flex items-center justify-between text-sm mt-auto">
+                  <span class="font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">{paper.data.venue}</span>
+                  <span class="text-gray-500">{paper.data.year}</span>
+               </div>
+             </div>
           </div>
         ))}
       </div>
@@ -129,27 +113,24 @@ const activities = (await getCollection('activities'))
   </section>
 
   <!-- Latest Activities -->
-  <section class="py-20">
+  <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-end mb-10 reveal">
-        <div>
-          <p class="eyebrow mb-3" data-i18n-key="nav.activities">Activities</p>
-          <h2 class="text-3xl sm:text-4xl text-gray-900" data-i18n-key="section.latestNews">Latest Activities</h2>
-        </div>
-        <a href="/activities" class="text-blue-700 hover:text-blue-800 font-medium flex items-center gap-1 group">
+      <div class="flex justify-between items-end mb-8">
+        <h2 class="text-3xl font-bold text-gray-900" data-i18n-key="section.latestNews">Latest Activities</h2>
+        <a href="/activities" class="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 group">
           <span data-i18n-key="section.viewAll">View all</span> <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </a>
       </div>
 
-      <div class="grid gap-6 md:grid-cols-3">
+      <div class="grid gap-8 md:grid-cols-3">
         {activities.map(item => (
-          <div class="card group overflow-hidden reveal">
+          <div class="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
             {item.data.cover && (
               <div class="h-48 overflow-hidden">
-                <Image
-                  src={item.data.cover}
+                <Image 
+                  src={item.data.cover} 
                   alt={item.data.title}
-                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   quality={80}
                   format="webp"
                   widths={[320, 480, 600]}
@@ -159,10 +140,10 @@ const activities = (await getCollection('activities'))
             )}
             <div class="p-6">
               <div class="text-sm text-gray-500 mb-2 flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                {item.data.date.toLocaleDateString()}
+                 <Calendar className="w-4 h-4" />
+                 {item.data.date.toLocaleDateString()}
               </div>
-              <h3 class="text-xl text-gray-900 group-hover:text-blue-700 transition-colors mb-2 line-clamp-2 leading-snug">
+              <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-2">
                 <a href={`/activities`}>{item.data.title}</a>
               </h3>
               <p class="text-gray-600 line-clamp-3 text-sm">{item.data.description || item.body.substring(0, 100)}</p>

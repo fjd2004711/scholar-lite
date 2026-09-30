@@ -1,120 +1,12 @@
 @import "tailwindcss";
-@import "@fontsource-variable/inter";
-@import "@fontsource-variable/source-serif-4";
 
-/*
- * Design tokens — warm paper, ink and terracotta.
- * Re-mapping Tailwind's `gray` and `blue` scales here re-skins the whole site;
- * to change the brand colour, edit the `blue` scale (brand) below.
- */
 @theme {
-  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
-  --font-serif: 'Source Serif 4 Variable', 'Source Serif 4', 'Songti SC', 'STSong', 'Noto Serif CJK SC', 'Source Han Serif SC', 'SimSun', Georgia, serif;
-
-  /* Warm neutrals (ink on paper) */
-  --color-white: #fdfcfa;
-  --color-gray-50: #f5f3ee;
-  --color-gray-100: #ece9e1;
-  --color-gray-200: #e0dcd1;
-  --color-gray-300: #cdc8ba;
-  --color-gray-400: #a8a295;
-  --color-gray-500: #7d776b;
-  --color-gray-600: #5f5a50;
-  --color-gray-700: #45413a;
-  --color-gray-800: #2f2c27;
-  --color-gray-900: #1f1d1a;
-  --color-gray-950: #141310;
-
-  /* Brand: terracotta */
-  --color-blue-50: #fbf0ea;
-  --color-blue-100: #f6ddd0;
-  --color-blue-200: #edbba3;
-  --color-blue-300: #e3977a;
-  --color-blue-400: #d97757;
-  --color-blue-500: #cc6a49;
-  --color-blue-600: #c15f3c;
-  --color-blue-700: #a24c2e;
-  --color-blue-800: #843f27;
-  --color-blue-900: #6b3524;
-
-  --color-paper: #faf9f5;
-  --color-ink: #1f1d1a;
-}
-
-html {
-  scroll-behavior: smooth;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 body {
   font-family: var(--font-sans);
-  @apply text-gray-800 antialiased;
-  background-color: var(--color-paper);
-  font-feature-settings: 'cv11', 'ss01';
-}
-
-/* Serif display type — Claude-style editorial headings */
-h1, h2, h3, .font-display {
-  font-family: var(--font-serif);
-  font-weight: 500;
-  letter-spacing: -0.015em;
-  font-optical-sizing: auto;
-}
-h1 { letter-spacing: -0.025em; }
-
-/* Headings in the templates use font-bold / font-extrabold; soften them */
-h1.font-extrabold, h1.font-bold,
-h2.font-bold, h3.font-bold,
-h3.font-semibold, h2.font-semibold {
-  font-weight: 500;
-}
-
-::selection {
-  background: var(--color-blue-200);
-  color: var(--color-gray-900);
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-blue-500);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* Eyebrow label above section titles */
-.eyebrow {
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  @apply text-blue-600;
-}
-
-/* Soft card: hairline border, paper surface, whisper shadow */
-.card {
-  @apply bg-white border border-gray-200 rounded-2xl;
-  box-shadow: 0 1px 2px rgb(31 29 26 / 0.04);
-  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
-}
-.card:hover {
-  @apply border-gray-300;
-  box-shadow: 0 8px 28px -8px rgb(31 29 26 / 0.12);
-  transform: translateY(-2px);
-}
-
-/* Scroll-reveal */
-.reveal {
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
-  * { animation-duration: 0.01ms !important; }
+  @apply text-gray-800 bg-white antialiased;
 }
 
 /* Custom Scrollbar for a cleaner look */
