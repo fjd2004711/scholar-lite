@@ -23,7 +23,7 @@ const iconMap: Record<string, any> = {
 const getIcon = (key: string) => iconMap[key] || Sparkles;
 ---
 
-<header class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 transition-colors duration-300">
+<header class="sticky top-0 z-50 w-full bg-paper/85 backdrop-blur-md border-b border-gray-200/80 transition-colors duration-300">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo & Name -->
@@ -31,7 +31,7 @@ const getIcon = (key: string) => iconMap[key] || Sparkles;
         <a href="/" class="flex items-center gap-2 group">
           {LOGO_IMAGE.enable && SITE.logo && <img src={SITE.logo} alt="Logo" class="h-8 w-8 object-contain" />}
           <div class="flex flex-col sm:flex-row sm:items-end sm:gap-2 leading-tight">
-            <span class="font-bold text-gray-900 text-lg leading-tight group-hover:text-blue-600 transition-colors">
+            <span class="font-display font-medium text-gray-900 text-xl leading-tight group-hover:text-blue-700 transition-colors">
               {SITE.labName}
             </span>
             <span class="hidden sm:inline text-gray-500 text-sm font-light pb-0.5">
@@ -42,7 +42,7 @@ const getIcon = (key: string) => iconMap[key] || Sparkles;
       </div>
 
       <!-- Desktop Nav -->
-      <nav class="hidden md:flex gap-6 items-center">
+      <nav class="hidden md:flex gap-1 items-center">
         {nav.map(item => {
           if (item.key === 'search') {
             return (
@@ -58,7 +58,7 @@ const getIcon = (key: string) => iconMap[key] || Sparkles;
           return (
             <a 
               href={item.link} 
-              class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+              class="text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
               data-i18n-key={`nav.${item.key}`}
             >
               {item.text}
@@ -70,7 +70,7 @@ const getIcon = (key: string) => iconMap[key] || Sparkles;
         {customPages && customPages.map(item => (
            <a 
              href={item.link} 
-            class="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+            class="text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
              data-i18n-key={item.key} 
            >
              {item.text}
@@ -130,7 +130,7 @@ const getIcon = (key: string) => iconMap[key] || Sparkles;
   <!-- Mobile Nav Overlay (Solid White) -->
   <div 
     id="mobile-menu" 
-    class="fixed inset-0 z-[100] w-screen h-screen bg-white md:hidden hidden flex-col"
+    class="fixed inset-0 z-[100] w-screen h-screen bg-paper md:hidden hidden flex-col"
     style="display: none;"
     role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="mobile-menu-title"
   >
