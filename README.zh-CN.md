@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Astro](https://img.shields.io/badge/Astro_v6-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro_v5-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Pagefind](https://img.shields.io/badge/Pagefind-Search-FF0000?style=for-the-badge&logo=algolia&logoColor=white)
@@ -72,7 +72,7 @@
 ## 🚀 为什么选择 Scholar-Lite？
 
 ### ⚡ 极致性能
-*   **默认零 JS (Zero JS)**：基于 **Astro v6** 构建，内容页面向客户端发送 **0kb** JavaScript，实现秒级加载。
+*   **默认零 JS (Zero JS)**：基于 **Astro v5**（`package-lock.json` 中锁定为 `astro@5.16.2`）构建，内容页面向客户端发送 **0kb** JavaScript，实现秒级加载。
 *   **Lighthouse 满分**：开箱即用的性能、可访问性、SEO 优化，均达到 Google Lighthouse 100/100 评分。
 *   **Tailwind CSS v4**：采用最新的原子化 CSS 框架，样式开发从未如此高效。
 
@@ -87,7 +87,7 @@
 *   **自动荣誉徽章**：自动根据 BibTeX 中的 `note` 字段识别 "Best Paper", "Oral" 等奖项并生成高亮徽章。
 
 ### 🌍 全球化视野
-*   **多语言搜索引擎**：内置 **Pagefind** 静态搜索引擎，支持 **8 种语言**（中、英、日、韩、法、德、西、俄）的全文检索。
+*   **多语言搜索界面**：内置 **Pagefind** 静态搜索，搜索框界面文案支持 **8 种语言**（中、英、日、韩、法、德、西、俄）。Pagefind 索引的是构建后的 HTML，因此索引语言取决于页面语言（默认英文）。
 *   **i18n 国际化**：原生支持中英双语切换，类型安全的翻译管理。
 
 ---
@@ -96,7 +96,7 @@
 
 | 特性 | 🎓 Scholar-Lite | 🐢 Hugo Academic (Wowchemy) |
 | :--- | :--- | :--- |
-| **技术栈** | **Astro v6 + React + Tailwind v4** (现代主流) | Hugo + Go 模板 (学习曲线陡峭) |
+| **技术栈** | **Astro v5 + React + Tailwind v4** (现代主流) | Hugo + Go 模板 (学习曲线陡峭) |
 | **性能** | **Lighthouse 100分** (默认零 JS) | 良好，但常因 JS 过重而臃肿 |
 | **BibTeX 导入** | **零配置** (拖入 `citations.bib` 即可) | 复杂的 Python 脚本 / 手动录入 |
 | **定制化** | **组件化开发** (直接修改 `.astro` / `.tsx`) | 僵化的主题系统 (覆盖内部模板困难) |
@@ -113,9 +113,9 @@
 
 ### 1. 安装
 ```bash
-git clone https://github.com/your-repo/scholar-lite.git
+git clone https://github.com/fjd2004711/scholar-lite.git
 cd scholar-lite
-npm install
+npm ci
 ```
 
 ### 2. 开发模式
@@ -130,7 +130,7 @@ npm run dev
 ```bash
 npm run build
 ```
-*注意：搜索索引仅在构建时生成，因此搜索功能需要运行 build 后才能完整体验。*
+*注意：搜索索引仅在构建时生成，因此搜索功能需要运行 build 后才能完整体验。`npm run build` 还会先执行 `npm run import-bibtex`，所以每次构建都会用 `citations.bib` 重新生成论文与著作页面（详见下文）。*
 
 ---
 
@@ -199,15 +199,17 @@ Scholar-Lite 在 `scripts/import-bibtex.js` 中内置了强大的 **BibTeX 导�
 ## 🌟 最佳实践
 
 ### 📁 目录结构建议
-*   **图片资源**: 建议存放于 `src/assets/images/`。使用 `.webp` 或压缩后的 `.jpg` 格式以获得最佳性能。
-*   **团队照片**: 成员头像建议存放于 `src/assets/team/`，推荐使用 1:1 方形裁剪。
-*   **内容文件**: 所有可编辑内容（新闻、团队、研究方向）均位于 `src/content/` 目录下。
+*   **图片资源**: 统一存放于 `src/assets/`。使用 `.webp` 或压缩后的 `.jpg` 格式以获得最佳性能。
+*   **团队照片**: 成员头像同样存放于 `src/assets/`，推荐使用 1:1 方形裁剪。frontmatter 中的图片路径相对于该 Markdown 文件解析，因此 `src/assets/` 下的图片应写作 `../../assets/avatar.jpg`。
+*   **网站设置**: 站点标题、实验室名称、学校、联系邮箱、首页大标题、导航与社交链接均在 `src/config.ts` 中修改。
+*   **内容文件**: 所有可编辑内容（新闻、团队、研究方向、学术活动）均位于 `src/content/` 目录下。
 
 ### 📝 内容管理技巧
 *   **新闻动态**: 在 `src/content/news/` 添加新的 Markdown 文件。文件名不影响排序，系统会自动根据 frontmatter 中的 `date` 字段排序。
 *   **团队成员**: 在 `src/content/team/` 添加成员。使用 `weight` 字段控制显示顺序（数字越小越靠前）。
 *   **研究方向**: 在 `src/content/research/` 添加 Markdown 文件。使用 `order` 字段控制显示顺序。
 *   **多语言文案**: 修改 `src/i18n/ui.ts` 可自定义导航栏、按钮等界面元素的翻译。
+*   **论文与著作**: 这两个 collection 由 `citations.bib` 生成。执行 `npm run import-bibtex`（`npm run build` 会自动执行）会重写 `src/content/publications/` 与 `src/content/books/` 中对应的文件，仅保留 `featured: true`。请以 `citations.bib` 为准；若想直接手改 Markdown，可从 `build` 脚本中去掉 `npm run import-bibtex &&`。
 
 ### 🎓 更多学术成果管理
 除了论文和书籍，系统还支持以下学术成果的管理。直接在对应文件夹中创建 Markdown 文件即可。
@@ -279,7 +281,7 @@ Scholar-Lite 是纯静态网站，可以部署在任何静态托管服务上。
 4.  点击部署即可。
 
 ### GitHub Pages / GitLab Pages
-本项目已包含 CI/CD 配置文件（`.github/workflows` 和 `.gitlab-ci.yml`），推送到代码仓库后会自动触发构建并发布到 GitHub/GitLab Pages。
+本项目自带 `.gitlab-ci.yml`，推送到 `main` 分支后会自动构建并将 `dist` 发布到 GitLab Pages。仓库中**没有** GitHub Actions 工作流；如需部署到 GitHub Pages，请自行添加一个运行 `npm run build` 并上传 `dist` 的 workflow。
 
 ---
 
