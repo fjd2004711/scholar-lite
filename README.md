@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Astro](https://img.shields.io/badge/Astro_v6-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro_v5-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Pagefind](https://img.shields.io/badge/Pagefind-Search-FF0000?style=for-the-badge&logo=algolia&logoColor=white)
@@ -72,7 +72,7 @@
 ## 🚀 Why Scholar-Lite?
 
 ### ⚡ Unmatched Performance
-*   **Zero JS by Default**: Built on **Astro v6**, sending **0kb** of JavaScript to the client for content pages.
+*   **Zero JS by Default**: Built on **Astro v5** (`astro@5.16.2` in `package-lock.json`), sending **0kb** of JavaScript to the client for content pages.
 *   **100/100 Lighthouse**: Optimized out-of-the-box for Performance, Accessibility, Best Practices, and SEO.
 *   **Tailwind CSS v4**: The latest utility-first CSS framework for rapid, modern styling.
 
@@ -87,7 +87,7 @@
 *   **Auto-Badging**: Automatically highlights "Best Paper", "Oral", or "Spotlight" awards based on BibTeX notes.
 
 ### 🌍 Global Reach
-*   **Multilingual Search**: Built-in **Pagefind** search engine supporting **8 languages** (English, Chinese, Japanese, Korean, French, German, Spanish, Russian).
+*   **Multilingual Search UI**: Built-in **Pagefind** static search, with the search widget translated into **8 languages** (English, Chinese, Japanese, Korean, French, German, Spanish, Russian). Pagefind indexes the rendered HTML, so the index itself uses the page language (English by default).
 *   **i18n Ready**: Native support for internationalization with type-safe translations.
 
 ---
@@ -96,7 +96,7 @@
 
 | Feature | 🎓 Scholar-Lite | 🐢 Hugo Academic (Wowchemy) |
 | :--- | :--- | :--- |
-| **Tech Stack** | **Astro v6 + React + Tailwind v4** (Modern & Mainstream) | Hugo + Go Templates (Steep learning curve) |
+| **Tech Stack** | **Astro v5 + React + Tailwind v4** (Modern & Mainstream) | Hugo + Go Templates (Steep learning curve) |
 | **Performance** | **100/100 Lighthouse** (Zero JS by default) | Good, but often bloated with heavy JS |
 | **BibTeX Import** | **Zero-Config** (Drag & drop `citations.bib`) | Complex Python scripts / Manual entry |
 | **Customization** | **Component-based** (Edit `.astro` / `.tsx` files directly) | Rigid Theme (Overriding internal templates is hard) |
@@ -113,9 +113,9 @@
 
 ### 1. Installation
 ```bash
-git clone https://github.com/your-repo/scholar-lite.git
+git clone https://github.com/fjd2004711/scholar-lite.git
 cd scholar-lite
-npm install
+npm ci
 ```
 
 ### 2. Development
@@ -130,7 +130,7 @@ Generate the static site and search index:
 ```bash
 npm run build
 ```
-*Note: The search index is generated at build time. Search functionality requires the build step.*
+*Note: The search index is generated at build time, so search requires the build step. `npm run build` also runs `npm run import-bibtex` first, so every build regenerates the publication and book pages from `citations.bib` (see below).*
 
 ---
 
@@ -199,15 +199,17 @@ Simply set the entry type to `@book`, and the system will automatically place it
 ## 🌟 Best Practices
 
 ### 📁 Directory Structure
-*   **Images**: Store website assets in `src/assets/images/`. Use `.webp` or optimized `.jpg` for better performance.
-*   **Team Photos**: Place headshots in `src/assets/team/`. Square aspect ratio (1:1) is recommended.
-*   **Content**: All editable content (News, Team, Research info) lives in `src/content/`.
+*   **Images**: Store website assets in `src/assets/`. Use `.webp` or optimized `.jpg` for better performance.
+*   **Team Photos**: Place headshots in `src/assets/` too. Square aspect ratio (1:1) is recommended. Image paths in frontmatter are resolved relative to the Markdown file, so a photo in `src/assets/` is written as `../../assets/avatar.jpg`.
+*   **Site Settings**: Edit `src/config.ts` for the site title, lab name, university, contact email, hero copy, navigation and social links.
+*   **Content**: All editable content (News, Team, Research, Activities) lives in `src/content/`.
 
 ### 📝 Content Management
 *   **News**: Add new Markdown files in `src/content/news/`. The filename doesn't matter, but sorting is based on the `date` field.
 *   **Team**: Add members in `src/content/team/`. Use `weight` to control display order (lower numbers appear first).
 *   **Research Fields**: Add Markdown files in `src/content/research/`. Use `order` field to control display order.
 *   **Translations**: Edit `src/i18n/ui.ts` to modify UI text (e.g., navigation menu, buttons) for all supported languages.
+*   **Publications & Books**: These two collections are generated from `citations.bib`. Running `npm run import-bibtex` (which `npm run build` does automatically) rewrites the matching files in `src/content/publications/` and `src/content/books/`, preserving only `featured: true`. Treat `citations.bib` as the source of truth, or remove `npm run import-bibtex &&` from the `build` script if you prefer to edit the Markdown by hand.
 
 ### 🎓 More Academic Achievements
 Beyond papers and books, the system supports managing other academic achievements. Simply create Markdown files in the corresponding folders.
@@ -280,7 +282,7 @@ Scholar-Lite is a static site that can be deployed anywhere.
 4.  Deploy!
 
 ### GitHub Pages / GitLab Pages
-This template includes CI/CD configurations (`.github/workflows` and `.gitlab-ci.yml`) to automatically build and deploy to GitHub/GitLab Pages on push.
+This template ships with `.gitlab-ci.yml`, which builds the site and publishes `dist` to GitLab Pages on every push to `main`. There is no GitHub Actions workflow in the repository; for GitHub Pages, add your own workflow that runs `npm run build` and uploads `dist`.
 
 ---
 
